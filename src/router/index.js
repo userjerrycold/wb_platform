@@ -7,6 +7,7 @@ import Tools from '@/views/Tools.vue'
 import Recipes from '@/views/Recipes.vue'
 import AIPrompts from '@/views/AIPrompts.vue'
 import Game from '@/views/Game.vue'
+import Diablo from '@/views/Diablo.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,6 +51,11 @@ const router = createRouter({
       path: '/game',
       name: 'game',
       component: Game
+    },
+    {
+      path: '/diablo',
+      name: 'diablo',
+      component: Diablo
     }
   ]
 })

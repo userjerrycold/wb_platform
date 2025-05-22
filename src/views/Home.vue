@@ -537,7 +537,7 @@
             </CardContainer>
           </ClientOnly>
 
-          <!-- 坦克薯条卡片 -->
+          <!-- 游戏天地卡片 -->
           <ClientOnly>
             <CardContainer>
               <CardBody
@@ -634,6 +634,110 @@
                     class="rounded-xl bg-black px-4 py-2 text-xs font-bold text-white dark:bg-white dark:text-black"
                   >
                     开始游戏
+                  </CardItem>
+                </div>
+              </CardBody>
+            </CardContainer>
+          </ClientOnly>
+
+          <!-- 征战暗黑卡片 -->
+          <ClientOnly>
+            <CardContainer>
+              <CardBody
+                class="group/card relative size-auto rounded-xl border border-black/[0.1] bg-gray-50 p-6 sm:w-[24rem] dark:border-white/[0.2] dark:bg-black dark:hover:shadow-2xl dark:hover:shadow-amber-500/[0.1]"
+              >
+                <CardItem
+                  :translate-z="50"
+                  class="text-xl font-bold text-neutral-600 dark:text-white"
+                >
+                  征战暗黑
+                </CardItem>
+                <CardItem
+                  as="p"
+                  translate-z="60"
+                  class="mt-2 max-w-sm text-sm text-neutral-500 dark:text-neutral-300"
+                >
+                  暗黑2重制版游戏资讯、攻略、MOD与工具
+                </CardItem>
+                <CardItem
+                  :translate-z="100"
+                  class="mt-4 w-full"
+                >
+                  <div class="space-y-4">
+                    <!-- 游戏分类统计 -->
+                    <div class="grid grid-cols-2 gap-3">
+                      <div class="flex items-center space-x-2 p-2 rounded-lg bg-amber-50 dark:bg-amber-900/20">
+                        <div class="w-2 h-2 rounded-full bg-amber-500"></div>
+                        <div class="flex flex-col">
+                          <span class="text-sm font-medium text-amber-600 dark:text-amber-400">角色收藏</span>
+                          <span class="text-xs text-amber-500 dark:text-amber-300">7 个英雄</span>
+                        </div>
+                      </div>
+                      <div class="flex items-center space-x-2 p-2 rounded-lg bg-orange-50 dark:bg-orange-900/20">
+                        <div class="w-2 h-2 rounded-full bg-orange-500"></div>
+                        <div class="flex flex-col">
+                          <span class="text-sm font-medium text-orange-600 dark:text-orange-400">最高等级</span>
+                          <span class="text-xs text-orange-500 dark:text-orange-300">92级法师</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 热门攻略 -->
+                    <div class="space-y-2">
+                      <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-300">热门攻略</span>
+                        <CardItem
+                          :translate-z="20"
+                          as="router-link"
+                          to="/diablo"
+                          class="text-xs text-gray-500 dark:text-gray-400"
+                        >
+                          查看全部
+                        </CardItem>
+                      </div>
+                      <div class="space-y-2">
+                        <div class="p-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+                          <div class="flex items-start justify-between">
+                            <span class="text-sm text-gray-800 dark:text-gray-200 line-clamp-1">法师单人HC地狱攻略</span>
+                            <span class="text-xs text-blue-500">法师</span>
+                          </div>
+                          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">针对法师单人HC地狱难度通关的全面指南，包含技能配点和装备选择...</p>
+                        </div>
+                        <div class="p-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+                          <div class="flex items-start justify-between">
+                            <span class="text-sm text-gray-800 dark:text-gray-200 line-clamp-1">符文之语配方大全</span>
+                            <span class="text-xs text-amber-500">装备指南</span>
+                          </div>
+                          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">所有符文之语的组合配方及适用职业分析...</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 职业标签 -->
+                    <div class="flex flex-wrap gap-2">
+                      <span class="px-2 py-1 rounded-full bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs">野蛮人</span>
+                      <span class="px-2 py-1 rounded-full bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400 text-xs">圣骑士</span>
+                      <span class="px-2 py-1 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-xs">法师</span>
+                      <span class="px-2 py-1 rounded-full bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 text-xs">死灵法师</span>
+                    </div>
+                  </div>
+                </CardItem>
+                <div class="mt-6 flex items-center justify-between">
+                  <CardItem
+                    :translate-z="20"
+                    as="router-link"
+                    to="/diablo"
+                    class="rounded-xl px-4 py-2 text-xs font-normal dark:text-white"
+                  >
+                    查看详情 →
+                  </CardItem>
+                  <CardItem
+                    :translate-z="20"
+                    as="router-link"
+                    to="/diablo"
+                    class="rounded-xl bg-black px-4 py-2 text-xs font-bold text-white dark:bg-white dark:text-black"
+                  >
+                    进入暗黑
                   </CardItem>
                 </div>
               </CardBody>
