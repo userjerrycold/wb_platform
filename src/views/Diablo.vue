@@ -105,7 +105,7 @@
                 <!-- 表格数据展示 -->
                 <div v-else class="space-y-4">
                   <!-- 表格工具栏 -->
-                  <div class="flex flex-wrap gap-3 justify-between items-center bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3">
+                  <div class="flex flex-wrap gap-3 justify-between items-center bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 mb-3">
                     <div class="flex flex-wrap gap-2">
                       <button @click="clearTable" class="px-3 py-1.5 bg-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm border border-gray-300 dark:border-gray-600 transition-colors flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -124,6 +124,21 @@
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
                         删除选中行
+                      </button>
+                      <!-- 高级数据处理按钮 -->
+                      <button 
+                        @click="showDataProcessingPanel = !showDataProcessingPanel" 
+                        class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:hover:bg-indigo-800/40 text-indigo-700 dark:text-indigo-300 rounded-lg text-sm border border-indigo-300 dark:border-indigo-700 transition-colors flex items-center"
+                        :class="{'bg-indigo-100 dark:bg-indigo-900/50': showDataProcessingPanel}"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        高级数据处理
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1.5 transition-transform" :class="{'rotate-180': showDataProcessingPanel}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
                       </button>
                     </div>
                     <div class="flex items-center">
@@ -152,20 +167,113 @@
                             class="px-3 py-1.5 bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300 rounded-lg text-sm border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                           />
                         </div>
-                        <button @click="exportToExcel" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm transition-colors flex items-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4 4l-4-4m0 0l-4 4m4-4v12" />
-                          </svg>
-                          导出Excel
-                        </button>
+                        <div class="flex flex-wrap gap-2">
+                          <button @click="exportToExcel" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm transition-colors flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4-4m0 0l-4 4m4-4v12" />
+                            </svg>
+                            导出Excel
+                          </button>
+                          <button @click="exportToTxt" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-colors flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            导出TXT
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                   
-                  <!-- 表格和功能面板容器 -->
-                  <div class="grid grid-cols-12 gap-4">
+                  <!-- 高级数据处理面板 - 可折叠 -->
+                  <div v-if="showDataProcessingPanel" class="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/30 dark:to-blue-900/20 rounded-lg border border-indigo-200 dark:border-indigo-800/50 p-4 shadow-md mb-3 animate-slideDown">
+                    <div class="flex items-center justify-between mb-3">
+                      <h4 class="font-bold text-indigo-800 dark:text-indigo-300 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        数据批量处理工具
+                      </h4>
+                      <span class="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-800/50 text-indigo-600 dark:text-indigo-300 rounded text-xs">批量计算</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      <!-- 列选择下拉框 -->
+                      <div>
+                        <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">选择处理列</label>
+                        <select 
+                          v-model="selectedColumn" 
+                          class="w-full px-2 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                        >
+                          <option value="">请选择列</option>
+                          <option v-for="header in tableHeaders" :key="header" :value="header">
+                            {{ header }}
+                          </option>
+                        </select>
+                      </div>
+                      
+                      <!-- 操作类型选择 -->
+                      <div>
+                        <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">操作类型</label>
+                        <div class="flex gap-2">
+                          <button 
+                            @click="operationType = 'multiply'"
+                            :class="operationType === 'multiply' ? 'bg-indigo-100 dark:bg-indigo-800/50 text-indigo-700 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600'"
+                            class="flex-1 px-2 py-1.5 text-sm rounded-md border transition-colors"
+                          >
+                            乘法
+                          </button>
+                          <button 
+                            @click="operationType = 'divide'"
+                            :class="operationType === 'divide' ? 'bg-indigo-100 dark:bg-indigo-800/50 text-indigo-700 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600'"
+                            class="flex-1 px-2 py-1.5 text-sm rounded-md border transition-colors"
+                          >
+                            除法
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <!-- 倍数输入框 -->
+                      <div>
+                        <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">
+                          {{ operationType === 'multiply' ? '乘以倍数' : '除以倍数' }}
+                        </label>
+                        <input 
+                          v-model.number="operationValue" 
+                          type="number" 
+                          min="0.01" 
+                          step="0.01" 
+                          placeholder="输入倍数" 
+                          class="w-full px-2 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                      </div>
+                      
+                      <!-- 操作按钮 -->
+                      <div class="flex flex-col justify-end">
+                        <button 
+                          @click="applyColumnOperation" 
+                          :disabled="!canApplyOperation"
+                          :class="canApplyOperation ? 'bg-indigo-600 hover:bg-indigo-700 text-white' : 'bg-gray-300 dark:bg-gray-700 cursor-not-allowed text-gray-500 dark:text-gray-400'" 
+                          class="w-full px-2 py-2 rounded-md text-sm transition-colors"
+                        >
+                          确定应用
+                        </button>
+                        <div v-if="operationMessage" :class="operationError ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'" class="text-xs text-center mt-1">
+                          {{ operationMessage }}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 pt-3 mt-3">
+                      <p>注意: 此功能将对选定列的数值进行四舍五入处理，非数值单元格将被跳过。</p>
+                    </div>
+                  </div>
+
+                  <!-- 表格容器 -->
+                  <div class="grid grid-cols-12">
                     <!-- 主表格容器，使用grid布局确保正确占据空间 -->
-                    <div class="col-span-12 lg:col-span-9">
+                    <div class="col-span-12">
                       <!-- 表格 -->
                       <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
                         <div class="overflow-x-auto max-h-[600px]" :class="{ 'table-fixed-header': fixedHeader, 'table-fixed-column': fixedFirstColumn }">
@@ -259,87 +367,6 @@
                         </div>
                       </div>
                     </div>
-                    
-                    <!-- 隐藏功能面板 -->
-                    <div v-if="showHiddenFeature" class="col-span-12 lg:col-span-3 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/30 dark:to-blue-900/20 rounded-lg border border-indigo-200 dark:border-indigo-800/50 p-4 shadow-md animate-fadeIn">
-                      <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                          <h4 class="text-sm font-bold text-indigo-800 dark:text-indigo-300">高级数据处理</h4>
-                          <span class="px-1.5 py-0.5 bg-indigo-100 dark:bg-indigo-800/50 text-indigo-600 dark:text-indigo-300 rounded text-xs">Beta</span>
-                        </div>
-                        
-                        <!-- 列选择下拉框 -->
-                        <div>
-                          <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">选择处理列</label>
-                          <select 
-                            v-model="selectedColumn" 
-                            class="w-full px-2 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                          >
-                            <option value="">请选择列</option>
-                            <option v-for="header in tableHeaders" :key="header" :value="header">
-                              {{ header }}
-                            </option>
-                          </select>
-                        </div>
-                        
-                        <!-- 操作类型选择 -->
-                        <div>
-                          <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">操作类型</label>
-                          <div class="flex gap-2">
-                            <button 
-                              @click="operationType = 'multiply'"
-                              :class="operationType === 'multiply' ? 'bg-indigo-100 dark:bg-indigo-800/50 text-indigo-700 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600'"
-                              class="flex-1 px-2 py-1.5 text-sm rounded-md border transition-colors"
-                            >
-                              乘法
-                            </button>
-                            <button 
-                              @click="operationType = 'divide'"
-                              :class="operationType === 'divide' ? 'bg-indigo-100 dark:bg-indigo-800/50 text-indigo-700 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600'"
-                              class="flex-1 px-2 py-1.5 text-sm rounded-md border transition-colors"
-                            >
-                              除法
-                            </button>
-                          </div>
-                        </div>
-                        
-                        <!-- 倍数输入框 -->
-                        <div>
-                          <label class="block text-xs text-gray-600 dark:text-gray-400 mb-1">
-                            {{ operationType === 'multiply' ? '乘以倍数' : '除以倍数' }}
-                          </label>
-                          <input 
-                            v-model.number="operationValue" 
-                            type="number" 
-                            min="0.01" 
-                            step="0.01" 
-                            placeholder="输入倍数" 
-                            class="w-full px-2 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-                          />
-                        </div>
-                        
-                        <!-- 操作按钮 -->
-                        <div>
-                          <button 
-                            @click="applyColumnOperation" 
-                            :disabled="!canApplyOperation"
-                            :class="canApplyOperation ? 'bg-indigo-600 hover:bg-indigo-700 text-white' : 'bg-gray-300 dark:bg-gray-700 cursor-not-allowed text-gray-500 dark:text-gray-400'" 
-                            class="w-full px-2 py-2 rounded-md text-sm transition-colors"
-                          >
-                            确定应用
-                          </button>
-                        </div>
-                        
-                        <!-- 操作提示 -->
-                        <div v-if="operationMessage" :class="operationError ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'" class="text-xs text-center">
-                          {{ operationMessage }}
-                        </div>
-                        
-                        <div class="text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 pt-3 mt-3">
-                          <p>注意: 此功能将对选定列的数值进行四舍五入处理，非数值单元格将被跳过。</p>
-                        </div>
-                      </div>
-                    </div>
                   </div>
 
                   <!-- 分页控件 -->
@@ -421,18 +448,32 @@
               <div v-if="activeSection === 'guides'" class="space-y-6">
                 <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-6 border-b border-gray-200 dark:border-gray-700 pb-2">游戏攻略</h3>
                 
-                <!-- 职业标签选择 -->
-                <div class="flex flex-wrap gap-2 mb-6">
-                  <button
-                    v-for="(classTab, index) in classTabs" 
-                    :key="index"
-                    @click="activeClassTab = classTab.id"
-                    class="px-3 py-1.5 rounded-full text-sm transition-colors"
-                    :class="activeClassTab === classTab.id ? 
-                      'bg-indigo-100 text-indigo-800 border border-indigo-300 dark:bg-indigo-900/40 dark:text-indigo-300 dark:border-indigo-700' : 
-                      'bg-gray-100 text-gray-700 border border-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 hover:border-indigo-300 dark:hover:border-indigo-700'"
+                <!-- 头部操作栏 -->
+                <div class="flex justify-between items-center mb-6">
+                  <!-- 职业标签选择 -->
+                  <div class="flex flex-wrap gap-2">
+                    <button
+                      v-for="(classTab, index) in classTabs" 
+                      :key="index"
+                      @click="activeClassTab = classTab.id"
+                      class="px-3 py-1.5 rounded-full text-sm transition-colors"
+                      :class="activeClassTab === classTab.id ? 
+                        'bg-indigo-100 text-indigo-800 border border-indigo-300 dark:bg-indigo-900/40 dark:text-indigo-300 dark:border-indigo-700' : 
+                        'bg-gray-100 text-gray-700 border border-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 hover:border-indigo-300 dark:hover:border-indigo-700'"
+                    >
+                      {{ classTab.name }}
+                    </button>
+                  </div>
+                  
+                  <!-- 添加按钮 -->
+                  <button 
+                    @click="openGuideEditModal()"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm transition-colors flex items-center"
                   >
-                    {{ classTab.name }}
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    添加攻略
                   </button>
                 </div>
                 
@@ -447,9 +488,21 @@
                         <span class="px-2 py-1 bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300 rounded-md text-xs">{{ guide.class }}</span>
                         <span class="ml-2 text-gray-500 text-sm">{{ guide.date }}</span>
                       </div>
-                      <button class="px-4 py-2 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:hover:bg-indigo-800/40 text-indigo-600 dark:text-indigo-400 rounded-lg text-sm transition-colors">
-                        查看详情
-                      </button>
+                      <div class="flex items-center gap-2">
+                        <button @click="openGuideEditModal(guide, index)" class="p-1.5 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:hover:bg-indigo-800/40 text-indigo-600 dark:text-indigo-400 rounded-lg text-sm transition-colors">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                        </button>
+                        <button @click="deleteGuide(index)" class="p-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:hover:bg-red-800/40 text-red-600 dark:text-red-400 rounded-lg text-sm transition-colors">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                        <button class="px-4 py-1.5 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:hover:bg-indigo-800/40 text-indigo-600 dark:text-indigo-400 rounded-lg text-sm transition-colors">
+                          查看详情
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -458,6 +511,20 @@
               <!-- 游戏MOD -->
               <div v-if="activeSection === 'mods'" class="space-y-6">
                 <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-6 border-b border-gray-200 dark:border-gray-700 pb-2">游戏MOD</h3>
+                
+                <!-- 添加按钮 -->
+                <div class="flex justify-end mb-4">
+                  <button 
+                    @click="openModEditModal()"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm transition-colors flex items-center"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    添加MOD
+                  </button>
+                </div>
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div v-for="(mod, index) in mods" :key="index" 
                        class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden hover:border-indigo-500/50 transition-all">
@@ -475,9 +542,21 @@
                           </svg>
                           <span>{{ mod.downloads }}次下载</span>
                         </div>
-                        <button class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:hover:bg-indigo-800/40 text-indigo-600 dark:text-indigo-400 rounded-lg text-xs transition-colors">
-                          下载MOD
-                        </button>
+                        <div class="flex items-center gap-2">
+                          <button @click="openModEditModal(mod, index)" class="p-1.5 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:hover:bg-indigo-800/40 text-indigo-600 dark:text-indigo-400 rounded-lg text-sm transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                          </button>
+                          <button @click="deleteMod(index)" class="p-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:hover:bg-red-800/40 text-red-600 dark:text-red-400 rounded-lg text-sm transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                          <button class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:hover:bg-indigo-800/40 text-indigo-600 dark:text-indigo-400 rounded-lg text-xs transition-colors">
+                            下载MOD
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -487,6 +566,20 @@
               <!-- 游戏工具 -->
               <div v-if="activeSection === 'tools'" class="space-y-6">
                 <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-6 border-b border-gray-200 dark:border-gray-700 pb-2">游戏工具</h3>
+                
+                <!-- 添加按钮 -->
+                <div class="flex justify-end mb-4">
+                  <button 
+                    @click="openToolEditModal()"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm transition-colors flex items-center"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    添加工具
+                  </button>
+                </div>
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div v-for="(tool, index) in tools" :key="index" 
                        class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 p-5 hover:border-indigo-500/50 transition-all">
@@ -500,9 +593,21 @@
                     </div>
                     <div class="flex items-center justify-between">
                       <span class="text-gray-500 text-sm">最后更新: {{ tool.lastUpdate }}</span>
-                      <button class="px-4 py-2 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:hover:bg-indigo-800/40 text-indigo-600 dark:text-indigo-400 rounded-lg text-sm transition-colors">
-                        获取工具
-                      </button>
+                      <div class="flex items-center gap-2">
+                        <button @click="openToolEditModal(tool, index)" class="p-1.5 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:hover:bg-indigo-800/40 text-indigo-600 dark:text-indigo-400 rounded-lg text-sm transition-colors">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                        </button>
+                        <button @click="deleteTool(index)" class="p-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:hover:bg-red-800/40 text-red-600 dark:text-red-400 rounded-lg text-sm transition-colors">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                        <button class="px-4 py-2 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:hover:bg-indigo-800/40 text-indigo-600 dark:text-indigo-400 rounded-lg text-sm transition-colors">
+                          获取工具
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -511,6 +616,19 @@
               <!-- 游戏开发 -->
               <div v-if="activeSection === 'development'" class="space-y-6">
                 <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-6 border-b border-gray-200 dark:border-gray-700 pb-2">游戏开发</h3>
+                
+                <!-- 添加按钮 -->
+                <div class="flex justify-end mb-4">
+                  <button 
+                    @click="openDevNoteEditModal()"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm transition-colors flex items-center"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    添加开发笔记
+                  </button>
+                </div>
                 
                 <!-- 时间线 -->
                 <div class="relative">
@@ -525,7 +643,19 @@
                       <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 p-5">
                         <div class="flex justify-between items-start mb-3">
                           <h4 class="text-lg font-medium text-gray-800 dark:text-white">{{ devNote.title }}</h4>
-                          <span class="text-gray-500 text-sm">{{ devNote.date }}</span>
+                          <div class="flex items-center gap-2">
+                            <span class="text-gray-500 text-sm">{{ devNote.date }}</span>
+                            <button @click="openDevNoteEditModal(devNote, index)" class="p-1.5 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:hover:bg-indigo-800/40 text-indigo-600 dark:text-indigo-400 rounded-lg text-sm transition-colors">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                              </svg>
+                            </button>
+                            <button @click="deleteDevNote(index)" class="p-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:hover:bg-red-800/40 text-red-600 dark:text-red-400 rounded-lg text-sm transition-colors">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                            </button>
+                          </div>
                         </div>
                         <p class="text-gray-600 dark:text-gray-400 mb-4">{{ devNote.content }}</p>
                         <div class="flex flex-wrap gap-2">
@@ -726,6 +856,7 @@
 
     <!-- 添加Modal弹窗 -->
     <Teleport to="body">
+      <!-- 已有的MOD详情弹窗 -->
       <div v-if="showModModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <!-- 背景遮罩 -->
@@ -751,6 +882,19 @@
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ selectedModCard.description }}</p>
               </div>
               
+              <!-- 添加笔记按钮 -->
+              <div class="flex justify-end mb-4">
+                <button 
+                  @click="openModNoteEditModal()"
+                  class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm transition-colors flex items-center"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                  </svg>
+                  添加笔记
+                </button>
+              </div>
+              
               <!-- 卡片内容 -->
               <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-2" style="scrollbar-width: thin;">
                 <div v-for="(note, idx) in selectedModCard.notes" :key="idx" 
@@ -758,7 +902,19 @@
                      :class="[`border-${note.color}-400 dark:border-${note.color}-600`]">
                   <div class="flex justify-between items-start mb-2">
                     <h4 class="font-medium text-gray-800 dark:text-gray-200">{{ note.title }}</h4>
-                    <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-gray-600 dark:text-gray-300">{{ note.date }}</span>
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-gray-600 dark:text-gray-300">{{ note.date }}</span>
+                      <button @click="openModNoteEditModal(note, idx)" class="p-1 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:hover:bg-indigo-800/40 text-indigo-600 dark:text-indigo-400 rounded-full text-sm transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                      </button>
+                      <button @click="deleteModNote(idx)" class="p-1 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:hover:bg-red-800/40 text-red-600 dark:text-red-400 rounded-full text-sm transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                   <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">{{ note.content }}</p>
                   <div class="flex flex-wrap gap-1">
@@ -770,6 +926,548 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 游戏攻略编辑弹窗 -->
+      <div v-if="showGuideEditModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <!-- 背景遮罩 -->
+          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 backdrop-blur-sm transition-opacity" @click="closeGuideEditModal"></div>
+          
+          <!-- Modal内容 -->
+          <div class="inline-block align-bottom bg-white dark:bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="absolute top-0 right-0 pt-4 pr-4">
+              <button @click="closeGuideEditModal" type="button" class="bg-white dark:bg-gray-800 rounded-full p-1 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div class="px-4 pt-5 pb-4 sm:p-6">
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                {{ editingGuideIndex === -1 ? '添加游戏攻略' : '编辑游戏攻略' }}
+              </h3>
+              
+              <form @submit.prevent="saveGuide" class="space-y-4">
+                <div>
+                  <label for="guide-title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">攻略标题</label>
+                  <input 
+                    id="guide-title"
+                    v-model="editingGuide.title" 
+                    type="text" 
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label for="guide-description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">攻略描述</label>
+                  <textarea 
+                    id="guide-description"
+                    v-model="editingGuide.description" 
+                    rows="3"
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  ></textarea>
+                </div>
+                
+                <div>
+                  <label for="guide-class" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">职业</label>
+                  <select 
+                    id="guide-class"
+                    v-model="editingGuide.class" 
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  >
+                    <option value="">请选择职业</option>
+                    <option value="野蛮人">野蛮人</option>
+                    <option value="圣骑士">圣骑士</option>
+                    <option value="法师">法师</option>
+                    <option value="死灵法师">死灵法师</option>
+                    <option value="亚马逊">亚马逊</option>
+                    <option value="刺客">刺客</option>
+                    <option value="德鲁伊">德鲁伊</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label for="guide-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">日期</label>
+                  <input 
+                    id="guide-date"
+                    v-model="editingGuide.date" 
+                    type="date" 
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  />
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-4">
+                  <button 
+                    type="button"
+                    @click="closeGuideEditModal"
+                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-md text-sm transition-colors"
+                  >
+                    取消
+                  </button>
+                  <button 
+                    type="submit"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm transition-colors"
+                  >
+                    保存
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 游戏MOD编辑弹窗 -->
+      <div v-if="showModEditModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <!-- 背景遮罩 -->
+          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 backdrop-blur-sm transition-opacity" @click="closeModEditModal"></div>
+          
+          <!-- Modal内容 -->
+          <div class="inline-block align-bottom bg-white dark:bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="absolute top-0 right-0 pt-4 pr-4">
+              <button @click="closeModEditModal" type="button" class="bg-white dark:bg-gray-800 rounded-full p-1 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div class="px-4 pt-5 pb-4 sm:p-6">
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                {{ editingModIndex === -1 ? '添加游戏MOD' : '编辑游戏MOD' }}
+              </h3>
+              
+              <form @submit.prevent="saveMod" class="space-y-4">
+                <div>
+                  <label for="mod-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">MOD名称</label>
+                  <input 
+                    id="mod-name"
+                    v-model="editingMod.name" 
+                    type="text" 
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  />
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label for="mod-version" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">版本</label>
+                    <input 
+                      id="mod-version"
+                      v-model="editingMod.version" 
+                      type="text" 
+                      placeholder="如: v1.0"
+                      class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label for="mod-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">类型</label>
+                    <select 
+                      id="mod-type"
+                      v-model="editingMod.type" 
+                      class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                      required
+                    >
+                      <option value="">请选择类型</option>
+                      <option value="大型改版">大型改版</option>
+                      <option value="功能增强">功能增强</option>
+                      <option value="掉落调整">掉落调整</option>
+                      <option value="画质增强">画质增强</option>
+                      <option value="全面改版">全面改版</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div>
+                  <label for="mod-description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">描述</label>
+                  <textarea 
+                    id="mod-description"
+                    v-model="editingMod.description" 
+                    rows="3"
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  ></textarea>
+                </div>
+                
+                <div>
+                  <label for="mod-downloads" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">下载次数</label>
+                  <input 
+                    id="mod-downloads"
+                    v-model="editingMod.downloads" 
+                    type="text" 
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  />
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-4">
+                  <button 
+                    type="button"
+                    @click="closeModEditModal"
+                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-md text-sm transition-colors"
+                  >
+                    取消
+                  </button>
+                  <button 
+                    type="submit"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm transition-colors"
+                  >
+                    保存
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 游戏工具编辑弹窗 -->
+      <div v-if="showToolEditModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <!-- 背景遮罩 -->
+          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 backdrop-blur-sm transition-opacity" @click="closeToolEditModal"></div>
+          
+          <!-- Modal内容 -->
+          <div class="inline-block align-bottom bg-white dark:bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="absolute top-0 right-0 pt-4 pr-4">
+              <button @click="closeToolEditModal" type="button" class="bg-white dark:bg-gray-800 rounded-full p-1 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div class="px-4 pt-5 pb-4 sm:p-6">
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                {{ editingToolIndex === -1 ? '添加游戏工具' : '编辑游戏工具' }}
+              </h3>
+              
+              <form @submit.prevent="saveTool" class="space-y-4">
+                <div>
+                  <label for="tool-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">工具名称</label>
+                  <input 
+                    id="tool-name"
+                    v-model="editingTool.name" 
+                    type="text" 
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label for="tool-description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">描述</label>
+                  <textarea 
+                    id="tool-description"
+                    v-model="editingTool.description" 
+                    rows="3"
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  ></textarea>
+                </div>
+                
+                <div>
+                  <label for="tool-tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">标签 (用逗号分隔)</label>
+                  <input 
+                    id="tool-tags"
+                    v-model="editingToolTags" 
+                    type="text" 
+                    placeholder="例如: 离线工具,角色编辑,免费"
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label for="tool-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">最后更新日期</label>
+                  <input 
+                    id="tool-date"
+                    v-model="editingTool.lastUpdate" 
+                    type="date" 
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  />
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-4">
+                  <button 
+                    type="button"
+                    @click="closeToolEditModal"
+                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-md text-sm transition-colors"
+                  >
+                    取消
+                  </button>
+                  <button 
+                    type="submit"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm transition-colors"
+                  >
+                    保存
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 游戏开发笔记编辑弹窗 -->
+      <div v-if="showDevNoteEditModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <!-- 背景遮罩 -->
+          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 backdrop-blur-sm transition-opacity" @click="closeDevNoteEditModal"></div>
+          
+          <!-- Modal内容 -->
+          <div class="inline-block align-bottom bg-white dark:bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="absolute top-0 right-0 pt-4 pr-4">
+              <button @click="closeDevNoteEditModal" type="button" class="bg-white dark:bg-gray-800 rounded-full p-1 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div class="px-4 pt-5 pb-4 sm:p-6">
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                {{ editingDevNoteIndex === -1 ? '添加开发笔记' : '编辑开发笔记' }}
+              </h3>
+              
+              <form @submit.prevent="saveDevNote" class="space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label for="dev-note-day" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">天数</label>
+                    <input 
+                      id="dev-note-day"
+                      v-model="editingDevNote.day" 
+                      type="text" 
+                      placeholder="例如: 01"
+                      class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label for="dev-note-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">日期</label>
+                    <input 
+                      id="dev-note-date"
+                      v-model="editingDevNote.date" 
+                      type="date" 
+                      class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                      required
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label for="dev-note-title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">标题</label>
+                  <input 
+                    id="dev-note-title"
+                    v-model="editingDevNote.title" 
+                    type="text" 
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label for="dev-note-content" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">内容</label>
+                  <textarea 
+                    id="dev-note-content"
+                    v-model="editingDevNote.content" 
+                    rows="3"
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  ></textarea>
+                </div>
+                
+                <div>
+                  <label for="dev-note-tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">标签 (用逗号分隔)</label>
+                  <input 
+                    id="dev-note-tags"
+                    v-model="editingDevNoteTags" 
+                    type="text" 
+                    placeholder="例如: 项目启动,计划阶段"
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  />
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-4">
+                  <button 
+                    type="button"
+                    @click="closeDevNoteEditModal"
+                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-md text-sm transition-colors"
+                  >
+                    取消
+                  </button>
+                  <button 
+                    type="submit"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm transition-colors"
+                  >
+                    保存
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOD笔记编辑弹窗 -->
+      <div v-if="showModNoteEditModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <!-- 背景遮罩 -->
+          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 backdrop-blur-sm transition-opacity" @click="closeModNoteEditModal"></div>
+          
+          <!-- Modal内容 -->
+          <div class="inline-block align-bottom bg-white dark:bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="absolute top-0 right-0 pt-4 pr-4">
+              <button @click="closeModNoteEditModal" type="button" class="bg-white dark:bg-gray-800 rounded-full p-1 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div class="px-4 pt-5 pb-4 sm:p-6">
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                {{ editingModNoteIndex === -1 ? '添加MOD笔记' : '编辑MOD笔记' }}
+              </h3>
+              
+              <form @submit.prevent="saveModNote" class="space-y-4">
+                <div>
+                  <label for="mod-note-title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">标题</label>
+                  <input 
+                    id="mod-note-title"
+                    v-model="editingModNote.title" 
+                    type="text" 
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label for="mod-note-content" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">内容</label>
+                  <textarea 
+                    id="mod-note-content"
+                    v-model="editingModNote.content" 
+                    rows="3"
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  ></textarea>
+                </div>
+                
+                <div>
+                  <label for="mod-note-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">日期</label>
+                  <input 
+                    id="mod-note-date"
+                    v-model="editingModNote.date" 
+                    type="date" 
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label for="mod-note-tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">标签 (用逗号分隔)</label>
+                  <input 
+                    id="mod-note-tags"
+                    v-model="editingModNoteTags" 
+                    type="text" 
+                    placeholder="例如: 亚马逊,伤害提升,弹道优化"
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">颜色</label>
+                  <div class="grid grid-cols-4 gap-2">
+                    <button 
+                      type="button"
+                      @click="editingModNote.color = 'blue'"
+                      class="h-8 w-full rounded-md transition-all"
+                      :class="editingModNote.color === 'blue' ? 'ring-2 ring-offset-2 ring-blue-500' : ''"
+                      style="background-color: rgb(59, 130, 246);"
+                    ></button>
+                    <button 
+                      type="button"
+                      @click="editingModNote.color = 'green'"
+                      class="h-8 w-full rounded-md transition-all"
+                      :class="editingModNote.color === 'green' ? 'ring-2 ring-offset-2 ring-green-500' : ''"
+                      style="background-color: rgb(34, 197, 94);"
+                    ></button>
+                    <button 
+                      type="button"
+                      @click="editingModNote.color = 'red'"
+                      class="h-8 w-full rounded-md transition-all"
+                      :class="editingModNote.color === 'red' ? 'ring-2 ring-offset-2 ring-red-500' : ''"
+                      style="background-color: rgb(239, 68, 68);"
+                    ></button>
+                    <button 
+                      type="button"
+                      @click="editingModNote.color = 'purple'"
+                      class="h-8 w-full rounded-md transition-all"
+                      :class="editingModNote.color === 'purple' ? 'ring-2 ring-offset-2 ring-purple-500' : ''"
+                      style="background-color: rgb(168, 85, 247);"
+                    ></button>
+                    <button 
+                      type="button"
+                      @click="editingModNote.color = 'yellow'"
+                      class="h-8 w-full rounded-md transition-all"
+                      :class="editingModNote.color === 'yellow' ? 'ring-2 ring-offset-2 ring-yellow-500' : ''"
+                      style="background-color: rgb(234, 179, 8);"
+                    ></button>
+                    <button 
+                      type="button"
+                      @click="editingModNote.color = 'indigo'"
+                      class="h-8 w-full rounded-md transition-all"
+                      :class="editingModNote.color === 'indigo' ? 'ring-2 ring-offset-2 ring-indigo-500' : ''"
+                      style="background-color: rgb(99, 102, 241);"
+                    ></button>
+                    <button 
+                      type="button"
+                      @click="editingModNote.color = 'pink'"
+                      class="h-8 w-full rounded-md transition-all"
+                      :class="editingModNote.color === 'pink' ? 'ring-2 ring-offset-2 ring-pink-500' : ''"
+                      style="background-color: rgb(236, 72, 153);"
+                    ></button>
+                    <button 
+                      type="button"
+                      @click="editingModNote.color = 'orange'"
+                      class="h-8 w-full rounded-md transition-all"
+                      :class="editingModNote.color === 'orange' ? 'ring-2 ring-offset-2 ring-orange-500' : ''"
+                      style="background-color: rgb(249, 115, 22);"
+                    ></button>
+                  </div>
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-4">
+                  <button 
+                    type="button"
+                    @click="closeModNoteEditModal"
+                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-md text-sm transition-colors"
+                  >
+                    取消
+                  </button>
+                  <button 
+                    type="submit"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm transition-colors"
+                  >
+                    保存
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -816,14 +1514,7 @@ const operationType = ref('multiply') // 'multiply' or 'divide'
 const operationValue = ref(1)
 const operationMessage = ref('')
 const operationError = ref(false)
-
-// 检查是否显示隐藏功能
-const showHiddenFeature = computed(() => {
-  console.log('文件名:', excelFileName.value);
-  const result = excelFileName.value && excelFileName.value.toLowerCase().includes('uniqueitems');
-  console.log('显示隐藏功能:', result);
-  return result;
-})
+const showDataProcessingPanel = ref(false) // 控制面板显示状态
 
 // 检查是否可以应用操作
 const canApplyOperation = computed(() => {
@@ -1665,6 +2356,366 @@ const exportToExcel = async () => {
     alert('导出Excel失败: ' + error.message);
   }
 };
+
+// 表格功能 - 导出TXT
+const exportToTxt = () => {
+  if (tableData.value.length === 0) {
+    alert('表格中没有数据可导出');
+    return;
+  }
+  
+  try {
+    // 构建TXT内容
+    let txtContent = '';
+    
+    // 添加表头
+    txtContent += tableHeaders.value.join('\t') + '\n';
+    
+    // 添加数据行
+    tableData.value.forEach(row => {
+      const rowValues = tableHeaders.value.map(header => row[header] || '');
+      txtContent += rowValues.join('\t') + '\n';
+    });
+    
+    // 创建Blob对象
+    const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
+    
+    // 创建下载链接
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    
+    // 设置下载文件名
+    const date = new Date();
+    const timestamp = `${date.getFullYear()}${(date.getMonth()+1).toString().padStart(2,'0')}${date.getDate().toString().padStart(2,'0')}_${date.getHours().toString().padStart(2,'0')}${date.getMinutes().toString().padStart(2,'0')}`;
+    link.download = `表格数据_${timestamp}.txt`;
+    
+    // 设置链接并触发点击
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    
+    // 清理
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+  } catch (error) {
+    console.error('导出TXT失败:', error);
+    alert('导出TXT失败: ' + error.message);
+  }
+};
+
+// 游戏攻略编辑相关
+const showGuideEditModal = ref(false)
+const editingGuide = ref({
+  title: '',
+  description: '',
+  class: '',
+  date: ''
+})
+const editingGuideIndex = ref(-1)
+
+// 游戏攻略编辑功能
+const openGuideEditModal = (guide, index) => {
+  if (guide) {
+    // 编辑现有攻略
+    editingGuide.value = { ...guide }
+    editingGuideIndex.value = index
+  } else {
+    // 添加新攻略
+    editingGuide.value = {
+      title: '',
+      description: '',
+      class: '',
+      date: new Date().toISOString().slice(0, 10)
+    }
+    editingGuideIndex.value = -1
+  }
+  showGuideEditModal.value = true
+}
+
+const closeGuideEditModal = () => {
+  showGuideEditModal.value = false
+}
+
+const saveGuide = () => {
+  // 验证必填字段
+  if (!editingGuide.value.title || !editingGuide.value.description || !editingGuide.value.class || !editingGuide.value.date) {
+    alert('请填写所有必填字段')
+    return
+  }
+  
+  if (editingGuideIndex.value === -1) {
+    // 添加新攻略
+    guides.push({ ...editingGuide.value })
+  } else {
+    // 更新现有攻略
+    guides[editingGuideIndex.value] = { ...editingGuide.value }
+  }
+  
+  closeGuideEditModal()
+}
+
+const deleteGuide = (index) => {
+  if (confirm('确定要删除此攻略吗？')) {
+    guides.splice(index, 1)
+  }
+}
+
+// 游戏MOD编辑相关
+const showModEditModal = ref(false)
+const editingMod = ref({
+  name: '',
+  version: '',
+  type: '',
+  description: '',
+  downloads: ''
+})
+const editingModIndex = ref(-1)
+
+// 游戏MOD编辑功能
+const openModEditModal = (mod, index) => {
+  if (mod) {
+    // 编辑现有MOD
+    editingMod.value = { ...mod }
+    editingModIndex.value = index
+  } else {
+    // 添加新MOD
+    editingMod.value = {
+      name: '',
+      version: '',
+      type: '',
+      description: '',
+      downloads: '0'
+    }
+    editingModIndex.value = -1
+  }
+  showModEditModal.value = true
+}
+
+const closeModEditModal = () => {
+  showModEditModal.value = false
+}
+
+const saveMod = () => {
+  // 验证必填字段
+  if (!editingMod.value.name || !editingMod.value.version || !editingMod.value.type || !editingMod.value.description) {
+    alert('请填写所有必填字段')
+    return
+  }
+  
+  if (editingModIndex.value === -1) {
+    // 添加新MOD
+    mods.push({ ...editingMod.value })
+  } else {
+    // 更新现有MOD
+    mods[editingModIndex.value] = { ...editingMod.value }
+  }
+  
+  closeModEditModal()
+}
+
+const deleteMod = (index) => {
+  if (confirm('确定要删除此MOD吗？')) {
+    mods.splice(index, 1)
+  }
+}
+
+// 游戏工具编辑相关
+const showToolEditModal = ref(false)
+const editingTool = ref({
+  name: '',
+  description: '',
+  tags: [],
+  lastUpdate: ''
+})
+const editingToolTags = ref('')
+const editingToolIndex = ref(-1)
+
+// 游戏工具编辑功能
+const openToolEditModal = (tool, index) => {
+  if (tool) {
+    // 编辑现有工具
+    editingTool.value = { ...tool }
+    editingToolTags.value = tool.tags.join(',')
+    editingToolIndex.value = index
+  } else {
+    // 添加新工具
+    editingTool.value = {
+      name: '',
+      description: '',
+      tags: [],
+      lastUpdate: new Date().toISOString().slice(0, 10)
+    }
+    editingToolTags.value = ''
+    editingToolIndex.value = -1
+  }
+  showToolEditModal.value = true
+}
+
+const closeToolEditModal = () => {
+  showToolEditModal.value = false
+}
+
+const saveTool = () => {
+  // 验证必填字段
+  if (!editingTool.value.name || !editingTool.value.description || !editingToolTags.value || !editingTool.value.lastUpdate) {
+    alert('请填写所有必填字段')
+    return
+  }
+  
+  // 处理标签
+  editingTool.value.tags = editingToolTags.value.split(',').map(tag => tag.trim()).filter(tag => tag)
+  
+  if (editingToolIndex.value === -1) {
+    // 添加新工具
+    tools.push({ ...editingTool.value })
+  } else {
+    // 更新现有工具
+    tools[editingToolIndex.value] = { ...editingTool.value }
+  }
+  
+  closeToolEditModal()
+}
+
+const deleteTool = (index) => {
+  if (confirm('确定要删除此工具吗？')) {
+    tools.splice(index, 1)
+  }
+}
+
+// 游戏开发笔记编辑相关
+const showDevNoteEditModal = ref(false)
+const editingDevNote = ref({
+  day: '',
+  date: '',
+  title: '',
+  content: '',
+  tags: []
+})
+const editingDevNoteTags = ref('')
+const editingDevNoteIndex = ref(-1)
+
+// 游戏开发笔记编辑功能
+const openDevNoteEditModal = (devNote, index) => {
+  if (devNote) {
+    // 编辑现有开发笔记
+    editingDevNote.value = { ...devNote }
+    editingDevNoteTags.value = devNote.tags.join(',')
+    editingDevNoteIndex.value = index
+  } else {
+    // 添加新开发笔记
+    editingDevNote.value = {
+      day: '',
+      date: new Date().toISOString().slice(0, 10),
+      title: '',
+      content: '',
+      tags: []
+    }
+    editingDevNoteTags.value = ''
+    editingDevNoteIndex.value = -1
+  }
+  showDevNoteEditModal.value = true
+}
+
+const closeDevNoteEditModal = () => {
+  showDevNoteEditModal.value = false
+}
+
+const saveDevNote = () => {
+  // 验证必填字段
+  if (!editingDevNote.value.day || !editingDevNote.value.date || !editingDevNote.value.title || !editingDevNote.value.content || !editingDevNoteTags.value) {
+    alert('请填写所有必填字段')
+    return
+  }
+  
+  // 处理标签
+  editingDevNote.value.tags = editingDevNoteTags.value.split(',').map(tag => tag.trim()).filter(tag => tag)
+  
+  if (editingDevNoteIndex.value === -1) {
+    // 添加新开发笔记
+    devNotes.push({ ...editingDevNote.value })
+  } else {
+    // 更新现有开发笔记
+    devNotes[editingDevNoteIndex.value] = { ...editingDevNote.value }
+  }
+  
+  closeDevNoteEditModal()
+}
+
+const deleteDevNote = (index) => {
+  if (confirm('确定要删除此开发笔记吗？')) {
+    devNotes.splice(index, 1)
+  }
+}
+
+// MOD随笔编辑相关
+const showModNoteEditModal = ref(false)
+const editingModNote = ref({
+  title: '',
+  content: '',
+  date: '',
+  tags: [],
+  color: 'blue'
+})
+const editingModNoteTags = ref('')
+const editingModNoteIndex = ref(-1)
+
+// MOD随笔编辑功能
+const openModNoteEditModal = (note, index) => {
+  if (note) {
+    // 编辑现有MOD笔记
+    editingModNote.value = { ...note }
+    editingModNoteTags.value = note.tags.join(',')
+    editingModNoteIndex.value = index
+  } else {
+    // 添加新MOD笔记
+    editingModNote.value = {
+      title: '',
+      content: '',
+      date: new Date().toISOString().slice(0, 10),
+      tags: [],
+      color: 'blue'
+    }
+    editingModNoteTags.value = ''
+    editingModNoteIndex.value = -1
+  }
+  showModNoteEditModal.value = true
+}
+
+const closeModNoteEditModal = () => {
+  showModNoteEditModal.value = false
+}
+
+const saveModNote = () => {
+  // 验证必填字段
+  if (!editingModNote.value.title || !editingModNote.value.content || !editingModNote.value.date || !editingModNoteTags.value) {
+    alert('请填写所有必填字段')
+    return
+  }
+  
+  // 处理标签
+  editingModNote.value.tags = editingModNoteTags.value.split(',').map(tag => tag.trim()).filter(tag => tag)
+  
+  if (editingModNoteIndex.value === -1) {
+    // 添加新MOD笔记
+    selectedModCard.value.notes.push({ ...editingModNote.value })
+    // 更新计数
+    selectedModCard.value.count = selectedModCard.value.notes.length
+  } else {
+    // 更新现有MOD笔记
+    selectedModCard.value.notes[editingModNoteIndex.value] = { ...editingModNote.value }
+  }
+  
+  closeModNoteEditModal()
+}
+
+const deleteModNote = (index) => {
+  if (confirm('确定要删除此MOD笔记吗？')) {
+    selectedModCard.value.notes.splice(index, 1)
+    // 更新计数
+    selectedModCard.value.count = selectedModCard.value.notes.length
+  }
+}
 </script>
 
 <style>
@@ -1723,6 +2774,23 @@ const exportToExcel = async () => {
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+/* 添加下滑动画 */
+.animate-slideDown {
+  animation: slideDown 0.3s ease-in-out;
+  transform-origin: top;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
   }
 }
 </style> 
